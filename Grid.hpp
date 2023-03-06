@@ -9,4 +9,4 @@ public:
    void update_grid(Flock &flock);
    std::vector<Boid*> get_nearby_boids(Boid &boid);
 
-};
+}; 

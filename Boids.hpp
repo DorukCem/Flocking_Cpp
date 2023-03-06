@@ -26,7 +26,12 @@ public:
    void update(float dt);
    void calculate_grid_position();
    void steer_to(sf::Vector2f target_position);
+   void stay_in_bounds();
+   void cohesion();
+
 };
 
 
 // Look into enum class types for predators
+// I will steer to the average future position of flockmates for cohesion. 
+// 

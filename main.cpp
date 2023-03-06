@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Grid.hpp"
+#include "Manager.hpp"
 
 void draw(sf::RenderWindow &window, Flock &flock)
 {
@@ -16,12 +17,13 @@ int main()
     float dt;
     Flock flock(NUM_BOIDS);
     Grid grid;
+    Manager manager;
 
     sf::Vector2i mpos; //***
     
     
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(1);
     while (window.isOpen())
     {
         sf::Event event;
@@ -33,8 +35,9 @@ int main()
 
         mpos = sf::Mouse::getPosition(window); // ****
         sf::Vector2f m(mpos);
-
-        flock.update(dt, m);
+        
+        manager.update(flock, grid);
+        //flock.update(dt, m);
         
         
         window.clear();
