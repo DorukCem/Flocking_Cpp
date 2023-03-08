@@ -13,14 +13,9 @@ class Manager
          for (auto& boid: flock.boids)
          {
             nearby_boid = grid.get_nearby_boids(boid);
-            std::cout << nearby_boid.size();
-
-            std::vector<Boid*> in_range;
-            for (auto &nearby : nearby_boid)
-            {
-            ;
-            }
-            std::cout << std::endl;
+            boid.flocking_behaviour(nearby_boid);
+            
+            boid.update(0.3);
          }
       }
 };

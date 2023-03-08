@@ -23,3 +23,14 @@ void limit(sf::Vector2f &vec, float limit)
       vec *= multiplier;
    }
 }  
+
+void limit_min(sf::Vector2f &vec, float limit)
+{
+   float magnitude = magnitude_of_vector(vec);
+   if (magnitude == 0){return;}
+   if (magnitude < limit)
+   {
+      float multiplier = limit/magnitude;
+      vec *= multiplier;
+   }
+}

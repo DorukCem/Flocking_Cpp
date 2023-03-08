@@ -3,6 +3,7 @@
 #include "settings.h"
 #include <random>
 #include "vector_calculations.hpp"
+#include<cstdlib>
 
 class Boid
 {
@@ -18,17 +19,20 @@ public:
    sf::Vector2f position;
    sf::Vector2f velocity;
    sf::Vector2f acceleration;
-   float max_speed = 6.00f;
-   float max_force = 0.30f;
+   sf::Vector2f direction;
+   
    
    sf::Color color;
    
    void update(float dt);
    void calculate_grid_position();
-   void steer_to(sf::Vector2f target_position);
+   sf::Vector2f steer_to(sf::Vector2f target_position);
    void stay_in_bounds();
-   void cohesion();
-
+   void flocking_behaviour(std::vector<Boid*> &nearby_boid);
+   sf::Vector2f cohesion(std::vector<Boid*> &nearby_boid);
+   sf::Vector2f seperation(std::vector<Boid*> &nearby_boid);
+   sf::Vector2f alignment(std::vector<Boid*> &nearby_boid);
+   
 };
 
 

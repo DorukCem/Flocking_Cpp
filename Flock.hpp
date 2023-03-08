@@ -12,7 +12,6 @@ public:
       for (int i = 0; i<num_boids; i++)
       {
          Boid b;
-         b.position = sf::Vector2f(100*i,50);
          boids.push_back(b);
       }
    }
