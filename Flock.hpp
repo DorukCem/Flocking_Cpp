@@ -20,7 +20,6 @@ public:
    {
       for (auto &boid : boids)
       {
-         //boid.steer_to(mpos);
          boid.update(dt);
       }
    }

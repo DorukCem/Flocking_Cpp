@@ -4,10 +4,12 @@
 
 void draw(sf::RenderWindow &window, Flock &flock)
 {
-    sf::CircleShape circle(12);
+    sf::CircleShape circle(TRIANGLE_WIDTH);
     sf::ConvexShape triangle;
     triangle.setPointCount(3);
     sf::Vector2f point1, point2, tangent;
+
+  
 
     for (auto &boid : flock.boids)
     {
@@ -33,17 +35,16 @@ void draw(sf::RenderWindow &window, Flock &flock)
 
 int main()
 {
+    std::srand(std::time(nullptr));
+
     float dt;
     Flock flock(NUM_BOIDS);
     Grid grid;
     Manager manager;
 
-    sf::Vector2i mpos; //***
-    
-    
     
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(FPS);
     while (window.isOpen())
     {
         sf::Event event;
@@ -53,8 +54,6 @@ int main()
                 window.close();
         }
 
-        mpos = sf::Mouse::getPosition(window); // ****
-        sf::Vector2f m(mpos); //*****
         
         manager.update(flock, grid);
         

@@ -1,16 +1,20 @@
 #include "Boids.hpp"
-
+#include <iostream>
 
 int Boid::next_id = 0;
 
 Boid::Boid()
 {
    id = next_id++; //This allows every boid to have a unique ID
-   float x = 100 + rand() % (WIDTH - 200);
-   float y = 100 + rand() % (HEIGHT - 200);
+   int x = 100 + rand() % (WIDTH - 200);
+   int y = 100 + rand() % (HEIGHT - 200);
 
    position = sf::Vector2f(x,y);
-   velocity = sf::Vector2f(2,2);
+
+   //x and y become -1 or 1 at random
+   x = (x%2 == 0) ? -1: 1;
+   y = (y%2 == 0) ? -1: 1;
+   velocity = sf::Vector2f(x,y);
 }
 
 void Boid::update(float dt)
@@ -18,11 +22,11 @@ void Boid::update(float dt)
    stay_in_bounds();
    limit(acceleration,MAX_FORCE);
    
-   position += velocity;
-   velocity += acceleration;
-   
    limit(velocity, MAX_SPEED);
    limit_min(velocity, MIN_SPEED);
+
+   position += velocity;
+   velocity += acceleration;
 
    acceleration.x = 0;
    acceleration.y = 0;
@@ -41,7 +45,7 @@ void Boid::calculate_grid_position()
    } 
 }
 
-sf::Vector2f Boid::steer_to(sf::Vector2f target_position)  // change to return force probably
+sf::Vector2f Boid::steer_to(sf::Vector2f target_position)  
 {
    sf::Vector2f desired_velocity = target_position - position;
    normalize(desired_velocity);
@@ -51,10 +55,10 @@ sf::Vector2f Boid::steer_to(sf::Vector2f target_position)  // change to return f
 
 void Boid::stay_in_bounds()
 {
-   if (position.x < OUT_OF_BOUNDS_SIZE){acceleration.x += KEEP_IN_BOUNDS_FORCE;} 
-   if (position.x > WIDTH - OUT_OF_BOUNDS_SIZE){acceleration.x -= KEEP_IN_BOUNDS_FORCE;}
-   if (position.y < OUT_OF_BOUNDS_SIZE){acceleration.y += KEEP_IN_BOUNDS_FORCE;}
-   if (position.y > HEIGHT - OUT_OF_BOUNDS_SIZE){acceleration.y -= KEEP_IN_BOUNDS_FORCE;}
+   if (position.x < 0){position.x += WIDTH;} 
+   if (position.x > WIDTH){position.x -= WIDTH;}
+   if (position.y < 0){position.y += HEIGHT;}
+   if (position.y > HEIGHT){position.y -= HEIGHT;}
 }
 
 void Boid::flocking_behaviour(std::vector<Boid*> &nearby_boid)
@@ -72,22 +76,23 @@ void Boid::flocking_behaviour(std::vector<Boid*> &nearby_boid)
       }
    }
   
-   acceleration += cohesion(in_range);
-   acceleration += seperation(in_range) * 0.5f;
-   acceleration += alignment(in_range);
+   acceleration += cohesion(in_range) * 0.05f;
+   acceleration += seperation(in_range) * 3.0f;
+   acceleration += alignment(in_range) * 1.0f;
 }
 
 sf::Vector2f Boid::cohesion(std::vector<Boid*> &nearby_boid) 
 //Avg position of nearby boids
 {
    sf::Vector2f sum(0, 0);
-   int count = 0;
+   float count = 0.0f;
    for (auto &boid : nearby_boid)
    {
       sum+= boid->position;
       count++;
    }
    if (count == 0){return sum;}
+   sum /= count;
    
    return steer_to(sum);
 }
@@ -103,7 +108,7 @@ sf::Vector2f Boid::seperation(std::vector<Boid*> &nearby_boid)
       if (magnitude_of_vector(relative_pos) > SEPERATION_DISTANCE){continue;}
       sum -= relative_pos;
    }
-   
+   //normalize(sum);
    return sum;
 }
 
@@ -118,5 +123,6 @@ sf::Vector2f Boid::alignment(std::vector<Boid*> &nearby_boid)
    }
    if (count == 0){return sum;}
    sum /= count;
+   normalize(sum);
    return sum;
 }

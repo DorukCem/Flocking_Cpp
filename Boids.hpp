@@ -3,14 +3,15 @@
 #include "settings.h"
 #include <random>
 #include "vector_calculations.hpp"
-#include<cstdlib>
+#include <cstdlib>
+#include <ctime>
 
 class Boid
 {
 
 public:
    Boid();
-   //~Boid();
+
 
    static int next_id;
    int id;

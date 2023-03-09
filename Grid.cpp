@@ -55,6 +55,6 @@ std::vector<Boid*> Grid::get_nearby_boids(Boid &boid)
       
       }
    }
-
+   
    return nearby_boids;
 }
