@@ -12,18 +12,18 @@ class Boid
 public:
    Boid();
 
-
-   static int next_id;
    int id;
    int grid_position;
+   int num_nearby;
 
    sf::Vector2f position;
    sf::Vector2f velocity;
    sf::Vector2f acceleration;
    sf::Vector2f direction;
    
+   sf::Color color1;
+   sf::Color color2;
    
-   sf::Color color;
    
    void update(float dt);
    void calculate_grid_position();

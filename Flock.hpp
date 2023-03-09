@@ -16,12 +16,6 @@ public:
       }
    }
 
-   void update(float dt, sf::Vector2f mpos)
-   {
-      for (auto &boid : boids)
-      {
-         boid.update(dt);
-      }
-   }
+  
    
 };

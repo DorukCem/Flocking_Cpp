@@ -1,11 +1,22 @@
 #include "Boids.hpp"
 #include <iostream>
-
-int Boid::next_id = 0;
+#include <array>
 
 Boid::Boid()
 {
-   id = next_id++; //This allows every boid to have a unique ID
+
+   std::array<std::pair<sf::Color, sf::Color>, 4> color_pairs = {{
+      {sf::Color(52, 152, 219), sf::Color(41, 128, 185)},
+      {sf::Color(46, 204, 113), sf::Color(39, 174, 96)},
+      {sf::Color(241, 196, 15), sf::Color(243, 156, 18)},
+      {sf::Color(155, 89, 182), sf::Color(142, 68, 173)}
+   }};
+
+
+   id = rand() % 4;
+   color1 = color_pairs[id].first;
+   color2 = color_pairs[id].second;
+
    int x = 100 + rand() % (WIDTH - 200);
    int y = 100 + rand() % (HEIGHT - 200);
 
@@ -55,10 +66,16 @@ sf::Vector2f Boid::steer_to(sf::Vector2f target_position)
 
 void Boid::stay_in_bounds()
 {
-   if (position.x < 0){position.x += WIDTH;} 
-   if (position.x > WIDTH){position.x -= WIDTH;}
-   if (position.y < 0){position.y += HEIGHT;}
-   if (position.y > HEIGHT){position.y -= HEIGHT;}
+   // if (position.x < 0){position.x += WIDTH;} 
+   // if (position.x > WIDTH){position.x -= WIDTH;}
+   // if (position.y < 0){position.y += HEIGHT;}
+   // if (position.y > HEIGHT){position.y -= HEIGHT;}
+   {
+   if (position.x < OUT_OF_BOUNDS_SIZE){velocity.x += KEEP_IN_BOUNDS_FORCE;} 
+   if (position.x > WIDTH - OUT_OF_BOUNDS_SIZE){velocity.x -= KEEP_IN_BOUNDS_FORCE;}
+   if (position.y < OUT_OF_BOUNDS_SIZE){velocity.y += KEEP_IN_BOUNDS_FORCE;}
+   if (position.y > HEIGHT - OUT_OF_BOUNDS_SIZE){velocity.y -= KEEP_IN_BOUNDS_FORCE;}
+}
 }
 
 void Boid::flocking_behaviour(std::vector<Boid*> &nearby_boid)
@@ -76,9 +93,9 @@ void Boid::flocking_behaviour(std::vector<Boid*> &nearby_boid)
       }
    }
   
-   acceleration += cohesion(in_range) * 0.05f;
+   acceleration += cohesion(in_range) * 0.10f;
    acceleration += seperation(in_range) * 3.0f;
-   acceleration += alignment(in_range) * 1.0f;
+   acceleration += alignment(in_range) * 1.5f;
 }
 
 sf::Vector2f Boid::cohesion(std::vector<Boid*> &nearby_boid) 
@@ -88,6 +105,7 @@ sf::Vector2f Boid::cohesion(std::vector<Boid*> &nearby_boid)
    float count = 0.0f;
    for (auto &boid : nearby_boid)
    {
+      if (id != boid->id){continue;}
       sum+= boid->position;
       count++;
    }
@@ -118,6 +136,7 @@ sf::Vector2f Boid::alignment(std::vector<Boid*> &nearby_boid)
    float count = 0;
    for (auto &boid : nearby_boid)
    {
+      if (id != boid->id){continue;}
       sum += boid->velocity;
       count++;
    }

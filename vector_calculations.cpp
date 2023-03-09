@@ -34,3 +34,14 @@ void limit_min(sf::Vector2f &vec, float limit)
       vec *= multiplier;
    }
 }
+
+//Lınear Interpolation between colors
+sf::Color lerp(sf::Color a, sf::Color b, float t)
+{
+    return sf::Color(
+        (1 - t) * a.r + t * b.r,
+        (1 - t) * a.g + t * b.g,
+        (1 - t) * a.b + t * b.b,
+        (1 - t) * a.a + t * b.a
+    );
+}

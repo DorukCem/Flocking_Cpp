@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Grid.hpp"
 #include "Manager.hpp"
+#include <algorithm>
+
 
 void draw(sf::RenderWindow &window, Flock &flock)
 {
@@ -8,11 +10,17 @@ void draw(sf::RenderWindow &window, Flock &flock)
     sf::ConvexShape triangle;
     triangle.setPointCount(3);
     sf::Vector2f point1, point2, tangent;
-
-  
-
+    int num_colors = 20;
+    int nearby;
+    sf::Color color(0,50,0);
     for (auto &boid : flock.boids)
     {
+        nearby = std::min(boid.num_nearby, 30);
+        float factor = float(nearby) / num_colors;
+        color = lerp(boid.color1, boid.color2, factor);
+
+        triangle.setFillColor(color);
+
         sf::Vector2f direction = boid.velocity;
         if (magnitude_of_vector(direction) != 0)
         {

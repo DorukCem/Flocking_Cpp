@@ -13,6 +13,7 @@ class Manager
          for (auto& boid: flock.boids)
          {
             nearby_boid = grid.get_nearby_boids(boid);
+            boid.num_nearby = nearby_boid.size();
             boid.flocking_behaviour(nearby_boid);
             
             boid.update(0.3);
