@@ -25,7 +25,7 @@ void Grid::update_grid(Flock &flock)
    for (auto& boid : flock.boids)
    {
       boid.calculate_grid_position();
-      if (boid.grid_position != -1)
+      if (boid.grid_position != -1) //Only if the boid is inside the screen 
       {
          cells[boid.grid_position].push_back(&boid);
       }
@@ -34,8 +34,10 @@ void Grid::update_grid(Flock &flock)
 
 std::vector<Boid*> Grid::get_nearby_boids(Boid &boid)
 {
+   //Get all boids in cell and adjacent cells
    std::vector<Boid*> nearby_boids;
    if (boid.grid_position == -1) {return nearby_boids;}
+
    int row = int(boid.grid_position / NUM_HORIZONTAL_CELLS);
    int col = boid.grid_position % NUM_HORIZONTAL_CELLS;
 

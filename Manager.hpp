@@ -16,7 +16,7 @@ class Manager
             boid.num_nearby = nearby_boid.size();
             boid.flocking_behaviour(nearby_boid);
             
-            boid.update(0.3);
+            boid.update();
          }
       }
 };

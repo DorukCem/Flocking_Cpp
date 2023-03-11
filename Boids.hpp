@@ -25,11 +25,12 @@ public:
    sf::Color color2;
    
    
-   void update(float dt);
+   void update();
    void calculate_grid_position();
-   sf::Vector2f steer_to(sf::Vector2f target_position);
    void stay_in_bounds();
    void flocking_behaviour(std::vector<Boid*> &nearby_boid);
+   
+   sf::Vector2f steer_to(sf::Vector2f target_position);
    sf::Vector2f cohesion(std::vector<Boid*> &nearby_boid);
    sf::Vector2f seperation(std::vector<Boid*> &nearby_boid);
    sf::Vector2f alignment(std::vector<Boid*> &nearby_boid);
